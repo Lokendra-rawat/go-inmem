@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package feature_store;
+option go_package = "/proto";
+
+
+message PingReq {
+}
+
+message PongResp {
+  string pong = 1;
+}
+
+message GetSkuFeaturesReq {
+  string catalogue_name = 1;
+  string sku_id = 2;
+  string trace_id = 3;
+}
+
+message GetSkuFeaturesForAllCataloguesReq {
+  string sku_id = 1;
+  string trace_id = 2;
+}
+
+message SkuFeatures {
+  string sku_id = 1;
+  string p_type = 2;
+  string sub_category = 3;
+  float price = 4;
+  string date = 5;
+  float mad_that_day = 6;
+  float mbd_that_day = 7;
+  float asp_last_3 = 8;
+  float sku_hml_cut = 9;
+  float all_sku_gmv_1_real_time = 10;
+  float all_sku_gmv_per_imp_7 = 11;
+  float all_sku_mad_1_hist = 12;
+  float all_sku_mad_1_real_time = 13;
+  float all_sku_margin_1_real_time = 14;
+  float all_sku_mbd_1_hist = 15;
+  float all_sku_order_conversion_1_hist = 16;
+  float all_sku_order_conversion_1_real_time = 17;
+  float all_sku_gmv_per_dau_1_real_time = 18;
+  float all_sku_impression_1_real_time = 19;
+  float all_sku_margin_per_dau_1_real_time = 20;
+  float margin_real_time = 21;
+  float all_sku_unique_transacting_users_1_real_time = 22;
+  float all_sku_order_conversion_7 = 23;
+  float user_penetration_7 = 24;
+  int32 top_sku_flag = 25;
+  int32 top_sku_flag_all = 26;
+  float all_sku_orders_1_real_time = 27;
+  string last_reset_at = 28;
+}
+
+message GetSkuFeaturesResp {
+  SkuFeatures features = 1;
+}
+
+message GetSkuFeaturesForAllCataloguesResp {
+  map<string, SkuFeatures> features_map = 1;
+}
+
+message UpsertSkuFeaturesReq {
+  string sku_id = 1;
+  string catalogue_name = 2;
+  SkuFeatures features = 3;
+  string trace_id = 4;
+  optional int32 ttl = 5;
+}
+
+message UpsertSkuFeaturesResp {
+
+}
+
+message LockReq {
+  string key = 1;
+  int32 ttl = 2;
+  string owner = 3;
+  string trace_id = 4;
+}
+
+message LockResp {
+
+}
+
+message ReleaseReq {
+  string key = 1;
+  string owner = 2;
+  string trace_id = 3;
+}
+
+message ReleaseResp {
+
+}
+
+message OrderExistsReq {
+  string sku_id = 1;
+  int64 user_id = 2;
+  string trace_id = 3;
+}
+
+message OrderExistsResp {
+  bool value = 1;
+}
+
+message MarkOrderReq {
+  string sku_id = 1;
+  int64 user_id = 2;
+  string expires_at = 3;
+  string trace_id = 4;
+}
+
+message MarkOrderResp {
+}
+
+message ImpressionExistsReq {
+  string sku_id = 1;
+  int64 user_id = 2;
+  string trace_id = 3;
+}
+
+message ImpressionExistsResp {
+  bool value = 1;
+}
+
+message MarkImpressionReq {
+  string sku_id = 1;
+  int64 user_id = 2;
+  string expires_at = 3;
+  string trace_id = 4;
+}
+
+message MarkImpressionResp {
+}
+
+service FeatureStore {
+  rpc HeartBeat(PingReq) returns (PongResp) {};
+  rpc GetSkuFeatures(GetSkuFeaturesReq) returns (GetSkuFeaturesResp) {};
+  rpc GetSkuFeaturesForAllCatalogues(GetSkuFeaturesForAllCataloguesReq) returns (GetSkuFeaturesForAllCataloguesResp) {};
+  rpc UpsertSkuFeatures(UpsertSkuFeaturesReq) returns (UpsertSkuFeaturesResp) {};
+  rpc Lock(LockReq) returns (LockResp) {};
+  rpc Release(ReleaseReq) returns (ReleaseResp) {};
+  rpc OrderExists(OrderExistsReq) returns (OrderExistsResp) {};
+  rpc MarkOrder(MarkOrderReq) returns (MarkOrderResp) {};
+  rpc ImpressionExists(ImpressionExistsReq) returns (ImpressionExistsResp) {};
+  rpc MarkImpression(MarkImpressionReq) returns (MarkImpressionResp) {};
+};
